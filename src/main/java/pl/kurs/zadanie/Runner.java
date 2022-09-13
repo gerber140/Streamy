@@ -88,11 +88,6 @@ public class Runner {
         }
         return list;
     }
-    public static <T> void doActionForAll(List<T> list, Consumer<T> consumer){
-        for (int i = 0; i < list.size(); i++) {
-            consumer.accept(list.get(i));
-        }
-    }
     private static String[] names = {"Marian", "Staś", "Garfield", "Czaruś", "Jacuś", "Ludomir", "Borowik", "Kedi"};
     private static int[] ages = {1,2,3,4,5,6,7,8,9,10};
     private static boolean[] booleans = {true, false};
