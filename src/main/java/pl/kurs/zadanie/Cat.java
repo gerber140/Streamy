@@ -7,5 +7,8 @@ public class Cat extends Animal{
         super(name, age, sterilized);
     }
 
-
+    @Override
+    public String toString() {
+        return "Cat{}";
+    }
 }
