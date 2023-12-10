@@ -3,104 +3,96 @@ package pl.kurs.zadanie;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-
 
 public class Runner {
-
-
     public static void main(String[] args) {
-        List<Animal> animals = generateList(100, () -> generate());
+
+        List<Animal> animals = List.of(
+                new Dog("Burek", 3, false),
+                new Dog("Azor", 2, false),
+                new Dog("Lola", 4, true),
+                new Dog("Cezar", 5, false),
+                new Dog("Daisy", 1, true),
+                new Cat("Mruczek", 2, true),
+                new Cat("Filemon", 4, false),
+                new Cat("Fru-Fru", 3, true),
+                new Cat("Kropka", 1, false),
+                new Cat("Puszek", 5, true)
+        );
+
+
         for (Animal animal : animals) {
             System.out.println(animal);
         }
+
+
+        long LiczbaKotow = animals.stream()
+                .filter(animal -> animal instanceof Cat)
+                .count();
+
+        long NieWysterylizowaneKoty = animals.stream()
+                .filter(animal -> animal instanceof Cat)
+                .filter(animal -> !((Cat) animal).isSterilized())
+                .count();
+
+
+        animals.stream()
+                .filter(animal -> animal instanceof Cat)
+                .forEach(animal -> animal.setSterilized(true));
+
+
+        long LiczbaPsow = animals.stream()
+                .filter(animal -> animal instanceof Dog)
+                .count();
+
+        long NieWysterylizowanePsy = animals.stream()
+                .filter(animal -> animal instanceof Dog && !animal.isSterilized())
+                .count();
+
+        animals.stream()
+                .filter(animal -> animal instanceof Dog && !animal.isSterilized())
+                .forEach(animal -> animal.setSterilized(true));
+
+
+        Dog najstarszyPies = (Dog) animals.stream()
+                .filter(animal -> animal instanceof Dog)
+                .max(Comparator.comparingInt(Animal::getAge))
+                .orElse(null);
+
+        Dog najmlodszyPies = (Dog) animals.stream()
+                .filter(animal -> animal instanceof Dog)
+                .min(Comparator.comparingInt(Animal::getAge))
+                .orElse(null);
+
+
+        Cat najstarszyKot = (Cat) animals.stream()
+                .filter(animal -> animal instanceof Cat)
+                .max(Comparator.comparingInt(Animal::getAge))
+                .orElse(null);
+
+        Cat najmlodszyKot = (Cat) animals.stream()
+                .filter(animal -> animal instanceof Cat)
+                .min(Comparator.comparingInt(Animal::getAge))
+                .orElse(null);
+
+
+        System.out.println();
+        System.out.println("Liczba kotów: " + LiczbaKotow);
+        System.out.println("Nie wysterylizowane koty: " + NieWysterylizowaneKoty);
+        System.out.println("Liczba psów: " + LiczbaPsow);
+        System.out.println("Nie wysterylizowane psy: " + NieWysterylizowanePsy);
+        System.out.println("Najstarszy kot: " + najstarszyKot.getName() + "  Lat: " + najstarszyKot.getAge());
+        System.out.println("Najstarszy pies: " + najstarszyPies.getName() + "  Lat: " + najstarszyPies.getAge());
+        System.out.println("Najmlodszy kot: " + najmlodszyKot.getName() + "  Lat: " + najmlodszyKot.getAge());
+        System.out.println("Najmlodszy pies: " + najmlodszyPies.getName() + "  Lat: " + najmlodszyPies.getAge());
+        System.out.println("Róźnica wieku miedzy najstarszym kotem a najmlodszym psem: " + (najstarszyKot.getAge() - najmlodszyPies.getAge()));
         System.out.println();
 
-        List<Animal> catList = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Cat.class.getSimpleName()))
-                .collect(Collectors.toList());
-
-        System.out.println("Ile kotów: " +catList.size());
-
-        List<Animal> nonSterilizedCats = catList.stream()
-                .filter(x -> x.isSterilized() == false)
-                .collect(Collectors.toList());
-
-        System.out.println("Ile niesterylizowanych kotów: " +nonSterilizedCats.size());
-
-        nonSterilizedCats.stream()
-                .forEach(x -> x.setSterilized(true));
-
-
-
-        List<Animal> dogList = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Dog.class.getSimpleName()))
-                .collect(Collectors.toList());
-
-        System.out.println("Ile psów:" +dogList.size());
-
-        List<Animal> nonSterilizedDogs = dogList.stream()
-                .filter(x -> x.isSterilized() == false)
-                .collect(Collectors.toList());
-
-        System.out.println("Ile niesterylizowanych psów: " +nonSterilizedDogs.size());
-
-        nonSterilizedDogs.stream()
-                .forEach(x -> x.setSterilized(true));
-
-
-        Animal oldestCat = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Cat.class.getSimpleName()))
-                .max(Comparator.comparingInt(Animal::getAge))
-                .orElseThrow();
-        System.out.println("Najstarszy kot: " +oldestCat);
-
-        Animal youngestCat = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Cat.class.getSimpleName()))
-                .min(Comparator.comparingInt(Animal::getAge))
-                .orElseThrow();
-        System.out.println("Najmłodszy kot: " +youngestCat);
-
-        Animal oldestDog = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Dog.class.getSimpleName()))
-                .max(Comparator.comparingInt(Animal::getAge))
-                .orElseThrow();
-        System.out.println("Najstarszy pies: " +oldestDog);
-
-        Animal youngestDog = animals.stream()
-                .filter(x -> x.getClass().getSimpleName().equals(Dog.class.getSimpleName()))
-                .min(Comparator.comparingInt(Animal::getAge))
-                .orElseThrow();
-        System.out.println("Najmłodszy pies: " +youngestDog);
-
-        System.out.println("Różnica: " +(oldestCat.getAge() - youngestDog.getAge()));
-
-
-    }
-    public static <T> List<T> generateList(int size, Supplier<T> supplier) {
-        List<T> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            list.add(i, supplier.get());
+        for (Animal animal : animals) {
+            System.out.println(animal);
         }
-        return list;
+
+
     }
-    private static String[] names = {"Marian", "Staś", "Garfield", "Czaruś", "Jacuś", "Ludomir", "Borowik", "Kedi"};
-    private static int[] ages = {1,2,3,4,5,6,7,8,9,10};
-    private static boolean[] booleans = {true, false};
-
-    private static Random random = new Random();
-    public static Animal generate() {
-        String generatedName = names[random.nextInt(names.length)];
-        int generatedAge = ages[random.nextInt(ages.length)];
-        boolean generatedBoolean = booleans[random.nextInt(booleans.length)];
-        Animal[] animals = {new Cat(generatedName, generatedAge, generatedBoolean), new Dog(generatedName, generatedAge, generatedBoolean)};
-
-        return animals[random.nextInt(animals.length)];
-    }
-
 
 }
