@@ -1,0 +1,12 @@
+Wygeneruj 10 kotów i psów (nadklasa Zwierzę z polami, name, age, sterilized, podklasy Pies i Kot);
+-Sprawdź ile jest kotów;
+-Sprawdź ile z tych kotów jest niewysterylizowanych;
+- wysterylizuj je;
+-Sprawdź ile jest psów,
+-Sprawdź ile z nich jest niewysterylizowanych;
+-wysterylizuj je;
+-znajdź najstarszego kota i psa,
+-Znajdź najmłodszego kota i psa,
+- oblicz jaka jest różnica lat pomiędzy najstarszym kotem a najmłodszym psem
+
+
